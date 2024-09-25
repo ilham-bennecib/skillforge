@@ -2,10 +2,10 @@ BEGIN;
 
 DROP TABLE IF EXISTS "role", "cfaEmployee_contact", "cfaEmployee_candidate", "course_training", "candidate_training", "cfaEmployee_news", 
 "student", "certificate", "event", "task", "news", "cfaEmployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
-"company", "user";
+"company", "user", "appUser","customer";
 DROP SEQUENCE IF EXISTS "cfaEmployee_contact_id_seq", "structure_id_seq", "cfaEmployee_candidate_id_seq", "course_training_id_seq", "candidate_training_id_seq", "cfaEmployee_news_id_seq", 
 "student_id_seq", "certificate_id_seq", "event_id_seq", "task_id_seq", "news_id_seq", "cfaEmployee_id_seq", "candidate_id_seq", "contact_id_seq", "course_id_seq", "session_id_seq", "training_id_seq", "field_id_seq", 
-"company_id_seq", "user_id_seq";
+"company_id_seq", "user_id_seq","appUser_id_seq","customer_id_seq" ;
 
 
 -- Création de la table 'roles' avec une colonne JSON pour les permissions
@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS "role" (
     "updatedAt" TIMESTAMPTZ 
 );
 
--- Création de la table user
-CREATE TABLE IF NOT EXISTS "user" (
+-- Création de la table customer
+CREATE TABLE IF NOT EXISTS "customer" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "lastName" VARCHAR(250) NOT NULL,
     "firstName" VARCHAR(250) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS "training" (
 CREATE TABLE IF NOT EXISTS "course" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" VARCHAR(250) NOT NULL,
-    "trainer" INT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "trainer" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS "contact" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "position" VARCHAR(250),
     "companyId" INT NOT NULL REFERENCES "company"("id") ON DELETE CASCADE,
-    "userId" INT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "password" TEXT NOT NULL,
     "roleId" INT NOT NULL REFERENCES "role"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS "candidate" (
     "lastDiploma" VARCHAR(250) NOT NULL,
     "dateOfBirth" DATE NOT NULL,
     "address" TEXT NOT NULL,
-    "userId" INT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS "cfaEmployee" (
     "password" TEXT NOT NULL,
     "cfa" INT NOT NULL REFERENCES "structure"("id") ON DELETE CASCADE,
     "roleId" INT NOT NULL REFERENCES "role"("id") ON DELETE CASCADE,
-    "userId" INT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS "session" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" VARCHAR(250) NOT NULL,
     "referent" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
-    "tutor" INT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "tutor" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "trainingId" INT NOT NULL REFERENCES "training"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ

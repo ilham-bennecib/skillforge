@@ -1,6 +1,6 @@
 BEGIN;
 
-TRUNCATE "role", "user", "cfaEmployee_contact", "cfaEmployee_candidate", "course_training", "candidate_training", "cfaEmployee_news", 
+TRUNCATE "role", "customer", "cfaEmployee_contact", "cfaEmployee_candidate", "course_training", "candidate_training", "cfaEmployee_news", 
 "student", "certificate", "event", "task", "news", "cfaEmployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
 "company" RESTART IDENTITY;
 
@@ -12,7 +12,7 @@ INSERT INTO "role" ("name", "permissions") VALUES
 ('étudiant', '{"read": true}');
 
 -- Insertion des utilisateurs
-INSERT INTO "user" ("lastName", "firstName", "email", "phone", "directory", "roleId") VALUES
+INSERT INTO "customer" ("lastName", "firstName", "email", "phone", "directory", "roleId") VALUES
 ('Doe', 'John', 'john.doe@example.com', 1234567890, 'dir1', 1),
 ('Smith', 'Jane', 'jane.smith@example.com', 9876543210, 'dir2', 2),
 ('Brown', 'Alice', 'alice.brown@example.com', 1122334455, 'dir3', 3);
