@@ -38,7 +38,7 @@ class UserMapper:
             # Fermer la connexion proprement
             self.connection.close()
             print("Connexion à la base de données fermée.")
-            
+
         return user
         
 
@@ -46,7 +46,7 @@ class UserMapper:
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO customer (lastName, firstName, email, phone, directory, roleId)
+                INSERT INTO customer ("lastName", "firstName", "email", "phone", "directory", "roleId")
                 VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id
                 """, (last_name, first_name, email, phone, directory, role_id)
