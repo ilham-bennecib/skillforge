@@ -3,6 +3,7 @@ from . import dataMapper_user
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .form import UserForm
+import psycopg2
 
 def get_all_users(request):
    
@@ -51,6 +52,7 @@ def get_one_user(request, user_id):
 
 @csrf_exempt 
 def create_user(request):
+
     # Initialiser le formulaire à None pour éviter l'erreur de portée
     form = None
 
@@ -94,3 +96,20 @@ def create_user(request):
             pass  # Remplacez ceci par votre logique de nettoyage si besoin
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def delete_user(request, user_id):
+    if request.method == 'DELETE':
+        try:
+            result = dataMapper_user.UserMapper().delete_user(user_id)
+            
+            if result['success']:
+                return JsonResponse({"message": result['message']}, status=200)
+            else:
+                return JsonResponse({"error": result['message']}, status=404)
+        except psycopg2.Error as e:
+            # Gestion des erreurs liées à la base de données
+            return JsonResponse({'error': f'An error occurred: {e}'}, status=500)
+    else:
+        # Si la méthode n'est pas DELETE, on retourne une erreur
+        return JsonResponse({'error': 'Invalid request method'}, status=405)

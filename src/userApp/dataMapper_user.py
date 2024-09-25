@@ -55,3 +55,29 @@ class UserMapper:
         self.connection.commit()
         return user_id
 
+
+    def delete_user(self, user_id):
+        try:
+            with self.connection.cursor() as cursor:
+                # Exécuter la requête de suppression
+                cursor.execute("DELETE FROM customer WHERE id = %s", [user_id])
+                
+                # Vérifier si la suppression a affecté une ligne
+                if cursor.rowcount == 0:
+                    return {"success": False, "message": "User not found"}
+
+            # Valider la transaction
+            self.connection.commit()
+            return {"success": True, "message": "User deleted successfully"}
+        
+        except psycopg2.Error as e:
+            # Gestion des erreurs liées à la base de données
+            print(f"Erreur lors de la suppression de l'utilisateur : {e}")
+            return {"success": False, "message": f"Database error: {str(e)}"}
+        
+        finally:
+            # Fermer la connexion proprement si elle n'a pas déjà été fermée
+            if self.connection:
+                self.connection.close()
+                print("Connexion à la base de données fermée.")
+            
