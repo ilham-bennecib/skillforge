@@ -80,4 +80,26 @@ class UserMapper:
             if self.connection:
                 self.connection.close()
                 print("Connexion à la base de données fermée.")
-            
+
+
+    def update_user(self, user_id, last_name, first_name, email, phone, directory, role_id):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    UPDATE customer
+                    SET "lastName" = %s, "firstName" = %s, "email" = %s, "phone" = %s, "directory" = %s, "roleId" = %s
+                    WHERE id = %s
+                    """,
+                    (last_name, first_name, email, phone, directory, role_id, user_id)
+                )
+                if cursor.rowcount == 0:  # Vérifie si l'utilisateur a été trouvé et mis à jour
+                    return {"error": "User not found"}  # Retourne une erreur si aucun utilisateur n'est trouvé
+
+            self.connection.commit()  # Commiter les changements
+        except psycopg2.Error as e:
+            return {"error": f"Database error: {e}"}  # Retourne l'erreur de base de données
+        finally:
+            self.connection.close()  # Assurez-vous que la connexion est fermée
+
+        return {"message": "User updated successfully"}  # Retourne un message de succès      
