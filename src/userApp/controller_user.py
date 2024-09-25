@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from . import dataMapper_user
 import json
 from django.views.decorators.csrf import csrf_exempt
+from .form import UserForm
 
 def get_all_users(request):
    
@@ -50,32 +51,46 @@ def get_one_user(request, user_id):
 
 @csrf_exempt 
 def create_user(request):
+    # Initialiser le formulaire à None pour éviter l'erreur de portée
+    form = None
+
     if request.method == 'POST':
         try:
-            # Extraire les données du body de la requête
+            # Récupérer les données du corps de la requête
             data = json.loads(request.body)
+            
+            # Créer une instance de UserForm avec les données
+            form = UserForm(data)
 
-            # Récupérer les champs obligatoires (ajouter des vérifications si nécessaire)
-            last_name = data.get('last_name')
-            first_name = data.get('first_name')
-            email = data.get('email')
-            phone = data.get('phone')
-            directory = data.get('directory')
-            role_id = data.get('role_id')
+            # Valider le formulaire
+            if form.is_valid():
+                last_name = form.cleaned_data['last_name']
+                first_name = form.cleaned_data['first_name']
+                email = form.cleaned_data['email']
+                phone = form.cleaned_data['phone']
+                directory = form.cleaned_data['directory']
+                role_id = form.cleaned_data['role_id']
 
-            # Appeler la méthode de création d'utilisateur du DataMapper
-            user_id = dataMapper_user.UserMapper().create_user(
-                last_name, first_name, email, phone, directory, role_id
-            )
+                # Créer l'utilisateur dans la base de données
+                user_id = dataMapper_user.UserMapper().create_user(
+                    last_name=last_name,
+                    first_name=first_name,
+                    email=email,
+                    phone=phone,
+                    directory=directory,
+                    role_id=role_id
+                )
 
-            # Retourner une réponse avec l'ID de l'utilisateur créé
-            return JsonResponse({'user_id': user_id, 'message': 'User created successfully'}, status=201)
+                return JsonResponse({'user_id': user_id, 'message': 'User created successfully'})
+            else:
+                return JsonResponse({'error': 'Invalid input', 'details': form.errors}, status=400)
 
-        except KeyError:
-            return JsonResponse({'error': 'Missing required fields'}, status=400)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': f"An error occurred: {str(e)}"}, status=500)
-    else:
-        return JsonResponse({'error': 'Invalid request method. Use POST.'}, status=405)
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+        finally:
+            # Ici, vous pouvez fermer la connexion si nécessaire, mais assurez-vous qu'elle a été ouverte
+            pass  # Remplacez ceci par votre logique de nettoyage si besoin
+
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
