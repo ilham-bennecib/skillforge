@@ -29,7 +29,7 @@ def get_all_users(request):
     else:
         return JsonResponse({'error': 'Users not found'}, status=404)
     
-def get_one_user(request, user_id):
+def get_one_user(request,user_id):
 
     one_user = dataMapper_user.UserMapper().get_user_by_id(user_id)
     print (one_user)
@@ -46,13 +46,12 @@ def get_one_user(request, user_id):
                 'updatedAt': one_user[8],
             }
 
-        return JsonResponse(user_data, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
+        return JsonResponse(user_data,safe=False)   # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
     else:
         return JsonResponse({'error': 'User not found'}, status=404)
 
 @csrf_exempt 
 def create_user(request):
-
     # Initialiser le formulaire à None pour éviter l'erreur de portée
     form = None
 
@@ -92,8 +91,7 @@ def create_user(request):
         except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
         finally:
-            # Ici, vous pouvez fermer la connexion si nécessaire, mais assurez-vous qu'elle a été ouverte
-            pass  # Remplacez ceci par votre logique de nettoyage si besoin
+            print("process finished successfully")
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
@@ -144,3 +142,30 @@ def update_user(request, user_id):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)  # Gestion de l'erreur pour JSON invalide
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)  # Gestion de l'erreur pour méthode non autorisée
+    
+#methode créer pour ne pas passer par la requete
+def fetch_user_by_id(user_id):
+    """
+    Fetch a user by ID and return the user data as a dictionary.
+    """
+    
+    try:
+        user = dataMapper_user.UserMapper().get_user_by_id(user_id)
+        if user:
+            # Create a dictionary with user details
+            user_data = {
+                'id': user[0],
+                'lastName': user[1],
+                'firstName': user[2],
+                'email': user[3],
+                'phone': user[4],
+                'directory': user[5],
+                'roleId': user[6],
+                'createdAt': user[7],
+                'updatedAt': user[8],
+            }
+            return user_data
+        else:
+            return None
+    except psycopg2.Error as e:
+        return {'error': f'Database error: {e}'}
