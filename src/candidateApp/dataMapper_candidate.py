@@ -12,18 +12,18 @@ class CandidateMapper:
             port=settings.DATABASES['default']['PORT']
         )
 
-    # def get_all_users(self):
-    #     try:
-    #         with self.connection.cursor() as cursor:
-    #             cursor.execute("SELECT * FROM customer")
-    #             all_users = cursor.fetchall()
-    #     except psycopg2.Error as e:
-    #         print(f"Erreur lors de la récupération des utilisateurs: {e}")
-    #         all_users = []
-    #     finally:
-    #         self.connection.close()
+    def get_all_candidates(self):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM candidate")
+                all_candidates = cursor.fetchall()
+        except psycopg2.Error as e:
+            print(f"Erreur lors de la récupération des candidats: {e}")
+            all_candidates = []
+        finally:
+            self.connection.close()
 
-    #     return all_users
+        return all_candidates
     
     def get_candidate_by_id(self,candidate_id):
         try:

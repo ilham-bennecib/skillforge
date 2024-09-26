@@ -17,29 +17,27 @@ def json_response_error(message, status=400):
 def json_response_success(data, status=200):
     return JsonResponse(data, status=status)
 
-# def get_all_users(request):
+def get_all_candidates(request):
    
-#     all_users = dataMapper_user.UserMapper().get_all_users()
-#     print(all_users)
-#     # Créer une liste de dictionnaires avec les données des utilisateurs
-#     if len(all_users) != 0:
+    all_candidate = dataMapper_candidate.CandidateMapper().get_all_candidates()
+    print(all_candidate)
+    # Créer une liste de dictionnaires avec les données des utilisateurs
+    if len(all_candidate) != 0:
 
-#         users_list = [
-#             {
-#                 'id': one_user[0],
-#                 'lastName': one_user[1],
-#                 'firstName': one_user[2],
-#                 'email': one_user[3],
-#                 'phone': one_user[4],
-#                 'directory': one_user[5],
-#                 'roleId': one_user[6],
-#                 'createdAt': one_user[7],
-#                 'updatedAt': one_user[8],
-#             } for one_user in all_users
-#         ]
-#         return JsonResponse(users_list, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
-#     else:
-#         return JsonResponse({'error': 'Users not found'}, status=404)
+        candidate_list = [
+            {
+                'id': one_candidate[0],
+                'lastDiploma': one_candidate[1],
+                'dateOfBirth': one_candidate[2],
+                'address': one_candidate[3],
+                'userId': one_candidate[4],
+                'createdAt': one_candidate[5],
+                'updatedAt': one_candidate[6]
+            } for one_candidate in all_candidate
+        ]
+        return JsonResponse(candidate_list, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
+    else:
+        return JsonResponse({'error': 'Users not found'}, status=404)
     
 def get_one_candidate(request, candidate_id):
 
