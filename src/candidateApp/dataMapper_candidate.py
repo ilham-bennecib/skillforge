@@ -25,22 +25,22 @@ class CandidateMapper:
 
     #     return all_users
     
-    # def get_user_by_id(self, user_id):
-        # try:
-        #     with self.connection.cursor() as cursor:
-        #         cursor.execute("SELECT * FROM customer WHERE id = %s", [user_id])
-        #         user = cursor.fetchone()
-        #         print (user)
-        # except psycopg2.Error as e:
-        #     # Gestion des erreurs liées à la base de données
-        #     print(f"Erreur lors de la récupération de l'utilisateur : {e}")
+    def get_candidate_by_id(self,candidate_id):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM candidate WHERE id = %s", [candidate_id])
+                candidate = cursor.fetchone()
+                print (candidate)
+        except psycopg2.Error as e:
+            # Gestion des erreurs liées à la base de données
+            print(f"Erreur lors de la récupération du candidat: {e}")
 
-        # finally:
-        #     # Fermer la connexion proprement
-        #     self.connection.close()
-        #     print("Connexion à la base de données fermée.")
+        finally:
+            # Fermer la connexion proprement
+            self.connection.close()
+            print("Connexion à la base de données fermée.")
 
-        # return user
+        return candidate
         
 
     def create_candidate(self, last_diploma, date_of_birth, address, userId):

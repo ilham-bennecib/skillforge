@@ -41,26 +41,25 @@ def json_response_success(data, status=200):
 #     else:
 #         return JsonResponse({'error': 'Users not found'}, status=404)
     
-# def get_one_user(request, user_id):
+def get_one_candidate(request, candidate_id):
 
-#     one_user = dataMapper_user.UserMapper().get_user_by_id(user_id)
-#     print (one_user)
-#     if one_user is not None:
-#         user_data={
-#                 'id': one_user[0],
-#                 'lastName': one_user[1],
-#                 'firstName': one_user[2],
-#                 'email': one_user[3],
-#                 'phone': one_user[4],
-#                 'directory': one_user[5],
-#                 'roleId': one_user[6],
-#                 'createdAt': one_user[7],
-#                 'updatedAt': one_user[8],
-#             }
+    one_candidate = dataMapper_candidate.CandidateMapper().get_candidate_by_id(candidate_id)
+    print (candidate_id)
+    if candidate_id is not None:
+        candidate_data={
+                'id': one_candidate[0],
+                'lastDiploma': one_candidate[1],
+                'dateOfBirth': one_candidate[2],
+                'address': one_candidate[3],
+                'userId': one_candidate[4],
+                'createdAt': one_candidate[5],
+                'updatedAt': one_candidate[6],
+                
+            }
 
-#         return JsonResponse(user_data, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
-#     else:
-#         return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse(candidate_data, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
+    else:
+        return JsonResponse({'error': 'candiate not found'}, status=404)
 
 
 
@@ -123,10 +122,14 @@ def create_candidate(request,user_id):
         return json_response_error("Method not allowed", 405)
 
 # @csrf_exempt
-# def delete_user(request, user_id):
+# def delete_candidate(request, user_id):
 
 #     if request.method == 'DELETE':
 #         try:
+#             #recupération de candidat pour avoir l'id user
+#             user_link_to_candidate = dataMapper_user.UserMapper().get_user_by_id(user_id)
+
+#             if user_link_to_candidate
 #             result = dataMapper_user.UserMapper().delete_user(user_id)
             
 #             if result['success']:
