@@ -85,6 +85,13 @@ class UserMapper:
     def update_user(self, user_id, last_name, first_name, email, phone, directory, role_id):
         try:
             with self.connection.cursor() as cursor:
+                #verifiactaion de l'existance du user
+                cursor.execute("SELECT * FROM customer WHERE id = %s", [user_id])
+                user = cursor.fetchone()
+                if user is None:
+                    return {"success": False, "message": "User not found"}
+                
+                #sinon , mise à jour des informations utilisateurs
                 cursor.execute(
                     """
                     UPDATE customer
@@ -96,10 +103,17 @@ class UserMapper:
                 if cursor.rowcount == 0:  # Vérifie si l'utilisateur a été trouvé et mis à jour
                     return {"error": "User not found"}  # Retourne une erreur si aucun utilisateur n'est trouvé
 
+            #valide la transaction
             self.connection.commit()  # Commiter les changements
+            return {"success": True, "message": "User updated successfully"}
+        
         except psycopg2.Error as e:
-            return {"error": f"Database error: {e}"}  # Retourne l'erreur de base de données
+            # Gestion des erreurs liées à la base de données
+            print(f"Erreur lors de la mise à jour de l'utilisateur : {e}")
+            return {"success": False, "message": f"Database error: {str(e)}"}
+        
         finally:
-            self.connection.close()  # Assurez-vous que la connexion est fermée
-
-        return {"message": "User updated successfully"}  # Retourne un message de succès      
+            #fermer la connexion 
+            if self.connection:
+                self.connection.close()
+                print("Connexion à la base de données fermée.")
