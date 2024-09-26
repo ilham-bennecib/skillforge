@@ -59,9 +59,6 @@ def get_one_candidate(request, candidate_id):
     else:
         return JsonResponse({'error': 'candiate not found'}, status=404)
 
-
-
-
 @csrf_exempt
 def create_candidate(request,user_id):
     if request.method == 'POST':
@@ -119,27 +116,33 @@ def create_candidate(request,user_id):
     else:
         return json_response_error("Method not allowed", 405)
 
-# @csrf_exempt
-# def delete_candidate(request, user_id):
+@csrf_exempt
+def delete_candidate(request, candidate_id):
 
-#     if request.method == 'DELETE':
-#         try:
-#             #recupération de candidat pour avoir l'id user
-#             user_link_to_candidate = dataMapper_user.UserMapper().get_user_by_id(user_id)
+    if request.method == 'DELETE':
+        try:
+            #Etape 1 : recupération de candidat pour son avoir l'id user
+            candidate_to_delete = dataMapper_candidate.CandidateMapper().get_candidate_by_id(candidate_id)
+            if not candidate_to_delete:
+                return JsonResponse({'error': 'Candidate not found'}, status=404)
 
-#             if user_link_to_candidate
-#             result = dataMapper_user.UserMapper().delete_user(user_id)
+            user_id = candidate_to_delete[4]
+            #Etape 2 :  On supprime candidat
+            delete_result = dataMapper_candidate.CandidateMapper().delete_candidate(candidate_id)
+            if not delete_result:
+                return JsonResponse({'error': 'Failed to delete candidate'}, status=500)
             
-#             if result['success']:
-#                 return JsonResponse({"message": result['message']}, status=200)
-#             else:
-#                 return JsonResponse({"error": result['message']}, status=404)
-#         except psycopg2.Error as e:
-#             # Gestion des erreurs liées à la base de données
-#             return JsonResponse({'error': f'An error occurred: {e}'}, status=500)
-#     else:
-#         # Si la méthode n'est pas DELETE, on retourne une erreur
-#         return JsonResponse({'error': 'Invalid request method'}, status=405)
+            #Etape 3 : on supprime le user associé : 
+            try:
+                dataMapper_user.UserMapper().delete_user(user_id)
+            except Exception as e:
+                return JsonResponse({'error': f'Failed to delete associated user: {e}'}, status=500)
+
+            return JsonResponse({'message': 'Candidate and associated user successfully deleted'}, status=200)
+        except Exception as e:
+                return JsonResponse({'error': f'Error occurred: {e}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
     
 # @csrf_exempt
 # def update_user(request, user_id):
