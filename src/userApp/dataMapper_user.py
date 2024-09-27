@@ -1,5 +1,6 @@
 import psycopg2
 from django.conf import settings
+from datetime import datetime 
 
 class UserMapper:
     def __init__(self):
@@ -95,7 +96,7 @@ class UserMapper:
                 cursor.execute(
                     """
                     UPDATE customer
-                    SET "lastName" = %s, "firstName" = %s, "email" = %s, "phone" = %s, "directory" = %s, "roleId" = %s
+                    SET "lastName" = %s, "firstName" = %s, "email" = %s, "phone" = %s, "directory" = %s, "roleId" = %s, "updatedAt" = NOW()
                     WHERE id = %s
                     """,
                     (last_name, first_name, email, phone, directory, role_id, user_id)

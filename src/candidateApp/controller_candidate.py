@@ -7,7 +7,7 @@ from .form_candidate import CandidateForm
 
 
 from . import dataMapper_candidate
-from userApp import controller_user, dataMapper_user
+from userApp import controller_user, dataMapper_user, form
 
 
 def json_response_error(message, status=400):
@@ -144,32 +144,58 @@ def delete_candidate(request, candidate_id):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
-# @csrf_exempt
-# def update_user(request, user_id):
-#     print("update_user method called")
-#     if request.method == 'PUT':
-#         try:
-#             # Charger les données JSON depuis le corps de la requête
-#             data = json.loads(request.body)
+@csrf_exempt
+def update_candidate(request, candidate_id):
+    print("update_user method called")
+    if request.method == 'PUT':
+        try:
+            # Charger les données JSON depuis le corps de la requête
+            data = json.loads(request.body)
 
-#             # Créer une instance de UserForm avec les données
-#             form = UserForm(data)
+            # Créer une instance de UserForm avec les données
+            form_candidate = CandidateForm(data)
+            form_user = form.UserForm(data)
 
-#             # Vérifiez si le formulaire est valide
-#             if form.is_valid():
-#                 last_name = form.cleaned_data['last_name']
-#                 first_name = form.cleaned_data['first_name']
-#                 email = form.cleaned_data['email']
-#                 phone = form.cleaned_data['phone']
-#                 directory = form.cleaned_data['directory']
-#                 role_id = form.cleaned_data['role_id']
+            # Vérifiez si le formulaire est valide
+            if form_candidate.is_valid() and form_user.is_valid() :
+                last_name = form_user.cleaned_data['last_name']
+                first_name = form_user.cleaned_data['first_name']
+                email = form_user.cleaned_data['email']
+                phone = form_user.cleaned_data['phone']
+                directory = form_user.cleaned_data['directory']
+                role_id = form_user.cleaned_data['role_id']
+                last_diploma = form_candidate.cleaned_data['last_diploma']
+                date_of_birth = form_candidate.cleaned_data['date_of_birth']
+                address = form_candidate.cleaned_data['address']
 
-#                 # Appeler la méthode update_user dans le dataMapper
-#                 result = dataMapper_user.UserMapper().update_user(user_id, last_name, first_name, email, phone, directory, role_id)
-#                 return JsonResponse(result)  # Retourne le résultat au format JSON
-#             else:
-#                 return JsonResponse({'error': form.errors}, status=400)  # Retourner les erreurs de validation
-#         except json.JSONDecodeError:
-#             return JsonResponse({'error': 'Invalid JSON'}, status=400)  # Gestion de l'erreur pour JSON invalide
-#     else:
-#         return JsonResponse({'error': 'Method not allowed'}, status=405)  # Gestion de l'erreur pour méthode non autorisée
+                #recupérer le user associé
+                candidate_to_update = dataMapper_candidate.CandidateMapper().get_candidate_by_id(candidate_id)
+                if not candidate_to_update:
+                    return JsonResponse({'error': 'Candidate not found'}, status=404)
+
+                user_id = candidate_to_update[4]
+
+                # Appeler la méthode update_user dans le dataMapper
+                
+                result_candidate = dataMapper_candidate.CandidateMapper().update_candidate(candidate_id, last_diploma, date_of_birth, address)
+                if not result_candidate.get("success"):
+                    return JsonResponse(result_candidate, status=400)
+                
+                # Appeler la méthode update_user dans le dataMapper
+                result_user = dataMapper_user.UserMapper().update_user(user_id, last_name, first_name, email, phone, directory, role_id)
+                if result_user.get("success"):
+                    return JsonResponse({"success": True, "message": "Candidate and User updated successfully"}, status=200)
+                else:
+                    return JsonResponse(result_user, status=400)
+
+            else:
+                # Combine errors from both forms
+                errors = {}
+                errors['form_user_errors'] = form_user.errors
+                errors['form_candidate_errors'] = form_candidate.errors
+                return JsonResponse({'error': errors}, status=400)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)  # Gestion de l'erreur pour JSON invalide
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)  # Gestion de l'erreur pour méthode non autorisée

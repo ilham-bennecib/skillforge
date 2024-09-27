@@ -1,5 +1,6 @@
 import psycopg2
 from django.conf import settings
+from datetime import datetime  
 
 
 class CandidateMapper:
@@ -84,38 +85,38 @@ class CandidateMapper:
                 print("Connexion à la base de données fermée.")
 
 
-    # def update_user(self, user_id, last_name, first_name, email, phone, directory, role_id):
-    #     try:
-    #         with self.connection.cursor() as cursor:
-    #             #verifiactaion de l'existance du user
-    #             cursor.execute("SELECT * FROM customer WHERE id = %s", [user_id])
-    #             user = cursor.fetchone()
-    #             if user is None:
-    #                 return {"success": False, "message": "User not found"}
+    def update_candidate(self, candidate_id, last_diploma, date_of_birth, address):
+        try:
+            with self.connection.cursor() as cursor:
+                #verifiactaion de l'existance du user
+                cursor.execute("SELECT * FROM candidate WHERE id = %s", [candidate_id])
+                candidate = cursor.fetchone()
+                if candidate is None:
+                    return {"success": False, "message": "User not found"}
                 
-    #             #sinon , mise à jour des informations utilisateurs
-    #             cursor.execute(
-    #                 """
-    #                 UPDATE customer
-    #                 SET "lastName" = %s, "firstName" = %s, "email" = %s, "phone" = %s, "directory" = %s, "roleId" = %s
-    #                 WHERE id = %s
-    #                 """,
-    #                 (last_name, first_name, email, phone, directory, role_id, user_id)
-    #             )
-    #             if cursor.rowcount == 0:  # Vérifie si l'utilisateur a été trouvé et mis à jour
-    #                 return {"error": "User not found"}  # Retourne une erreur si aucun utilisateur n'est trouvé
+                #sinon , mise à jour des informations utilisateurs
+                cursor.execute(
+                    """
+                    UPDATE candidate
+                    SET "lastDiploma" = %s, "dateOfBirth" = %s, "address" = %s, "updatedAt" = NOW()
+                    WHERE id = %s
+                    """,
+                    (last_diploma, date_of_birth, address, candidate_id )
+                )
+                if cursor.rowcount == 0:  # Vérifie si l'utilisateur a été trouvé et mis à jour
+                    return {"error": "User not found"}  # Retourne une erreur si aucun utilisateur n'est trouvé
 
-    #         #valide la transaction
-    #         self.connection.commit()  # Commiter les changements
-    #         return {"success": True, "message": "User updated successfully"}
+            #valide la transaction
+            self.connection.commit()  # Commiter les changements
+            return {"success": True, "message": "User updated successfully"}
         
-    #     except psycopg2.Error as e:
-    #         # Gestion des erreurs liées à la base de données
-    #         print(f"Erreur lors de la mise à jour de l'utilisateur : {e}")
-    #         return {"success": False, "message": f"Database error: {str(e)}"}
+        except psycopg2.Error as e:
+            # Gestion des erreurs liées à la base de données
+            print(f"Erreur lors de la mise à jour de l'utilisateur : {e}")
+            return {"success": False, "message": f"Database error: {str(e)}"}
         
-    #     finally:
-    #         #fermer la connexion 
-    #         if self.connection:
-    #             self.connection.close()
-    #             print("Connexion à la base de données fermée.")
+        finally:
+            #fermer la connexion 
+            if self.connection:
+                self.connection.close()
+                print("Connexion à la base de données fermée.")
