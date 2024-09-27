@@ -115,3 +115,31 @@ def update_structure(request, structure_id):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+#methode créer pour ne pas passer par la requete
+def fetch_structure_by_id(structure_id):
+    """
+    Fetch a user by ID and return the user data as a dictionary.
+    """
+    
+    try:
+        structure = dataMapper_structure.StructureMapper().get_structure_by_id(structure_id)
+        if structure:
+            # Create a dictionary with user details
+            structure_data = {
+                'id': structure[0],
+                'lastName': structure[1],
+                'firstName': structure[2],
+                'email': structure[3],
+                'phone': structure[4],
+                'directory': structure[5],
+                'roleId': structure[6],
+                'createdAt': structure[7],
+                'updatedAt': structure[8],
+            }
+            return structure_data
+        else:
+            return None
+    except psycopg2.Error as e:
+        return {'error': f'Database error: {e}'}
