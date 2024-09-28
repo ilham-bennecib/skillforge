@@ -10,6 +10,7 @@ INSERT INTO "role" ("name", "permissions") VALUES
 ('employé cfa', '{"create": true, "read": true, "update": true, "delete": true}'),
 ('interlocuteur', '{"create": true, "read": true, "update": true, "delete": true}'),
 ('étudiant', '{"create": true, "read": true, "update": true, "delete": true}'),
+("trainer",'{"read": true}'),
 ('candidat', '{"read": true}');
 
 -- Insertion des utilisateurs
