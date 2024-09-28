@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'studentApp',
     'trainingApp',
     'roleApp',
+    'fieldApp',
    
 ]
 
