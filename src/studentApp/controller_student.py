@@ -117,7 +117,7 @@ def delete_student(request, student_id):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-#Cette methode va updater le candidat associé mais aussi le user associé
+#Cette methode va updater le student, le candidat associé mais aussi le user associé
 @csrf_exempt
 def update_student(request, student_id):
     if request.method == 'PUT':
@@ -127,18 +127,15 @@ def update_student(request, student_id):
 
             # Step 2: Fetch the student by student_id
             student = dataMapper_student.StudentMapper().get_student_by_id(student_id)
-            print(f"le'student est : {student}")
             if not student:
                 return JsonResponse({'error': 'Student not found'}, status=404)
 
             candidate_id = student[4]  # Assuming candidateId is at index 4
             candidate = dataMapper_candidate.CandidateMapper().get_candidate_by_id(candidate_id)
-            print(print(f"le candidat est : {candidate}"))
             if not candidate:
                 return JsonResponse({'error': 'Candidate not found'}, status=404)
 
             user_id = candidate[4]  
-            print(f"le id user est {user_id}")
             user = dataMapper_user.UserMapper().get_user_by_id(user_id)
             if not user:
                 return JsonResponse({'error': 'User not found'}, status=404)
