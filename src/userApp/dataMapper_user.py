@@ -26,19 +26,18 @@ class UserMapper:
         return all_users
     
     def get_user_by_id(self, user_id):
+        user = None  # Initialize user to None to avoid UnboundLocalError
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM customer WHERE id = %s", [user_id])
                 user = cursor.fetchone()
-                print (user)
         except psycopg2.Error as e:
-            # Gestion des erreurs liées à la base de données
-            print(f"Erreur lors de la récupération de l'utilisateur : {e}")
-
+            # Log and handle any database error
+            print(f"Error fetching user: {e}")
+            user = None
         finally:
-            # Fermer la connexion proprement
+            # Close the connection properly
             self.connection.close()
-            print("Connexion à la base de données fermée.")
 
         return user
         

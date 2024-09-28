@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'userApp',
     'candidateApp',
     'companyApp',
-    'structureApp'
+    'structureApp',
+    'studentApp',
    
 ]
 

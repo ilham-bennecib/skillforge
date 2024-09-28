@@ -199,3 +199,5 @@ def update_candidate(request, candidate_id):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)  # Gestion de l'erreur pour JSON invalide
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)  # Gestion de l'erreur pour méthode non autorisée
+    
+

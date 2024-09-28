@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/structures/', include('structureApp.urls')),
     path('api/companies/', include('companyApp.urls')),
     # path('api/courses/', include('courseApp.urls')),
-     path('api/candidates/', include('candidateApp.urls')),
+    path('api/candidates/', include('candidateApp.urls')),
+    path('api/students/', include('studentApp.urls')),
     # path('api/trainings/', include('trainingApp.urls')),
 ]
