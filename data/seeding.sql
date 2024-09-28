@@ -29,8 +29,8 @@ INSERT INTO "structure" ("name", "address", "siret", "description", "directory",
 
 -- Insertion des entreprises
 INSERT INTO "company" ("status", "structureId") VALUES
-('Active', 1),
-('Inactive', 2);
+('Prospect', 1),
+('Partenaire', 2);
 
 -- Insertion des formations (training)
 INSERT INTO "training" ("name", "price", "startDate", "endDate", "type", "directory", "fieldId", "structureId") VALUES
@@ -80,9 +80,9 @@ INSERT INTO "event" ("title", "description", "date", "startTime", "endTime", "cf
 ('Séance Orientation', 'Informations sur nos programmes de formation.', '2024-08-01', '14:00:00', '16:00:00', 1);
 
 -- Insertion des étudiants
-INSERT INTO "student" ("password", "companyId", "roleId", "sessionId", "candidateId") VALUES
-('studentpass', 1, 3, 1, 1),
-('studpass2', 2, 3, 2, 2);
+INSERT INTO "student" ("password", "companyId", "sessionId", "candidateId") VALUES
+('studentpass', 1, 1, 1),
+('studpass2', 2, 2, 2);
 
 -- Insertion des certificats
 INSERT INTO "certificate" ("title", "description", "date", "status", "type", "level", "studentId") VALUES
