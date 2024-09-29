@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/roles/', include('roleApp.urls')),
     path('api/fields/', include('fieldApp.urls')),
     path('api/contacts/', include('contactApp.urls')),
+    path('api/cfaEmployees/', include('cfaEmployeeApp.urls')),
 ]

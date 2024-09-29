@@ -1,19 +1,19 @@
 BEGIN;
 
-DROP TABLE IF EXISTS "role", "cfaEmployee_contact", "cfaEmployee_candidate", "course_training", "candidate_training", "cfaEmployee_news", 
-"student", "certificate", "event", "task", "news", "cfaEmployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
-"company", "user", "appUser","customer";
-DROP SEQUENCE IF EXISTS "cfaEmployee_contact_id_seq", "structure_id_seq", "cfaEmployee_candidate_id_seq", "course_training_id_seq", "candidate_training_id_seq", "cfaEmployee_news_id_seq", 
-"student_id_seq", "certificate_id_seq", "event_id_seq", "task_id_seq", "news_id_seq", "cfaEmployee_id_seq", "candidate_id_seq", "contact_id_seq", "course_id_seq", "session_id_seq", "training_id_seq", "field_id_seq", 
-"company_id_seq", "user_id_seq","appUser_id_seq","customer_id_seq" ;
+DROP TABLE IF EXISTS "role", "cfaEmployee_contact", "cfaEmployee_candidate","cfaemployee_contact", "cfaemployee_candidate", "course_training","cfaEmployee_news",  "candidate_training", "cfaemployee_news", 
+"student", "certificate", "event", "task", "news", "cfaEmployee", "cfaemployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
+"company", "user", "appUser", "customer";
 
+DROP SEQUENCE IF EXISTS "cfaEmployee_contact_id_seq", "cfaemployee_contact_id_seq", "cfaEmployee_candidate_id_seq", "structure_id_seq", "cfaemployee_candidate_id_seq", "course_training_id_seq", "candidate_training_id_seq", "cfaemployee_news_id_seq", 
+"student_id_seq", "certificate_id_seq", "event_id_seq", "task_id_seq", "news_id_seq", "cfaEmployee_id_seq", "cfaemployee_id_seq", "candidate_id_seq", "contact_id_seq", "course_id_seq", "session_id_seq", "training_id_seq", "field_id_seq", 
+"company_id_seq", "user_id_seq", "appUser_id_seq", "customer_id_seq";
 
 -- Création de la table 'roles' avec une colonne JSON pour les permissions
 CREATE TABLE IF NOT EXISTS "role" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" VARCHAR(100) NOT NULL UNIQUE,
     "permissions" JSONB NOT NULL DEFAULT '[]',
-     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ 
 );
 
@@ -75,8 +75,6 @@ CREATE TABLE IF NOT EXISTS "training" (
     "updatedAt" TIMESTAMPTZ
 );
 
-
-
 -- Création de la table course
 CREATE TABLE IF NOT EXISTS "course" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -108,14 +106,13 @@ CREATE TABLE IF NOT EXISTS "candidate" (
     "updatedAt" TIMESTAMPTZ
 );
 
--- Création de la table cfaEmployee
-CREATE TABLE IF NOT EXISTS "cfaEmployee" (
+-- Création de la table cfaemployee
+CREATE TABLE IF NOT EXISTS "cfaemployee" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "position" VARCHAR(250),
     "matricule" INTEGER NOT NULL,
     "password" TEXT NOT NULL,
     "cfa" INT NOT NULL REFERENCES "structure"("id") ON DELETE CASCADE,
-    "roleId" INT NOT NULL REFERENCES "role"("id") ON DELETE CASCADE,
     "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
@@ -125,7 +122,7 @@ CREATE TABLE IF NOT EXISTS "cfaEmployee" (
 CREATE TABLE IF NOT EXISTS "session" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" VARCHAR(250) NOT NULL,
-    "referent" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "referent" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "tutor" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "trainingId" INT NOT NULL REFERENCES "training"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -148,7 +145,7 @@ CREATE TABLE IF NOT EXISTS "task" (
     "title" VARCHAR(200) NOT NULL,
     "description" TEXT,
     "date" DATE,
-    "cfaEmployeeId" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -161,7 +158,7 @@ CREATE TABLE IF NOT EXISTS "event" (
     "date" DATE NOT NULL,
     "startTime" TIME NOT NULL,
     "endTime" TIME NOT NULL,
-    "cfaEmployeeId" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -193,19 +190,19 @@ CREATE TABLE IF NOT EXISTS "certificate" (
 
 -- Création des tables de liaison pour les cardinalités N:N
 
--- cfaEmployee_contact
-CREATE TABLE IF NOT EXISTS "cfaEmployee_contact" (
+-- cfaemployee_contact
+CREATE TABLE IF NOT EXISTS "cfaemployee_contact" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "cfaEmployeeId" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "contactId" INT NOT NULL REFERENCES "contact"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
 
--- cfaEmployee_candidate
-CREATE TABLE IF NOT EXISTS "cfaEmployee_candidate" (
+-- cfaemployee_candidate
+CREATE TABLE IF NOT EXISTS "cfaemployee_candidate" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "cfaEmployeeId" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "candidateId" INT NOT NULL REFERENCES "candidate"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
@@ -229,10 +226,10 @@ CREATE TABLE IF NOT EXISTS "candidate_training" (
     "updatedAt" TIMESTAMPTZ
 );
 
--- cfaEmployee_news
-CREATE TABLE IF NOT EXISTS "cfaEmployee_news" (
+-- cfaemployee_news
+CREATE TABLE IF NOT EXISTS "cfaemployee_news" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "cfaEmployeeId" INT NOT NULL REFERENCES "cfaEmployee"("id") ON DELETE CASCADE,
+    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "newsId" INT NOT NULL REFERENCES "news"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ

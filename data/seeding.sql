@@ -1,7 +1,7 @@
 BEGIN;
 
-TRUNCATE "role", "customer", "cfaEmployee_contact", "cfaEmployee_candidate", "course_training", "candidate_training", "cfaEmployee_news", 
-"student", "certificate", "event", "task", "news", "cfaEmployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
+TRUNCATE "role", "customer", "cfaemployee_contact", "cfaemployee_candidate","cfaemployee_news", "course_training", "candidate_training",
+"student", "certificate", "event", "task", "news", "cfaemployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
 "company" RESTART IDENTITY;
 
 
@@ -64,14 +64,14 @@ INSERT INTO "training" ("name", "price", "startDate", "endDate", "type", "direct
 ('Formation Mathématiques', 3200.00, '2025-02-01', '2025-07-31', 'Formation continue', 'dirTraining7', 7, 7);
 
 -- Insertion des employés CFA
-INSERT INTO "cfaEmployee" ("position", "matricule", "password", "cfa", "roleId", "userId") VALUES
-('Formateur', 123456, 'cfaemppass', 1, 1, 1),
-('Responsable Administratif', 987654, 'adminpass', 2, 1, 2),
-('Directeur', 654321, 'dirpass', 3, 1, 3),
-('Secrétaire', 321654, 'secpass', 4, 1, 4),
-('Conseiller', 987321, 'conspass', 5, 1, 5),
-('Gestionnaire', 654987, 'gestpass', 6, 1, 6),
-('Comptable', 123987, 'comptpass', 7, 1, 7);
+INSERT INTO "cfaemployee" ("position", "matricule", "password", "cfa", "userId") VALUES
+('Formateur', 123456, 'cfaemppass', 1, 1),
+('Responsable Administratif', 987654, 'adminpass', 2, 2),
+('Directeur', 654321, 'dirpass', 3, 3),
+('Secrétaire', 321654, 'secpass', 4, 4),
+('Conseiller', 987321, 'conspass', 5, 5),
+('Gestionnaire', 654987, 'gestpass', 6, 6),
+('Comptable', 123987, 'comptpass', 7, 7);
 
 -- Insertion des sessions
 INSERT INTO "session" ("name", "referent", "tutor", "trainingId") VALUES
@@ -124,7 +124,7 @@ INSERT INTO "news" ("title", "description", "date") VALUES
 ('Conférence en Physique', 'Participez à notre conférence sur la physique des particules.', '2024-09-20');
 
 -- Insertion des tâches
-INSERT INTO "task" ("title", "description", "date", "cfaEmployeeId") VALUES
+INSERT INTO "task" ("title", "description", "date", "cfaemployeeId") VALUES
 ('Préparer les supports de cours', 'Créer des présentations pour le cours de programmation.', '2024-06-15', 1),
 ('Répondre aux appels', 'Gérer les appels entrants des candidats intéressés par la formation.', '2024-06-20', 2),
 ('Mettre à jour les supports', 'Mettre à jour les supports de cours en électronique.', '2024-07-05', 3),
@@ -134,7 +134,7 @@ INSERT INTO "task" ("title", "description", "date", "cfaEmployeeId") VALUES
 ('Finaliser le programme de maths', 'Finaliser le programme pour la session de mathématiques.', '2024-10-01', 7);
 
 -- Insertion des événements
-INSERT INTO "event" ("title", "description", "date", "startTime", "endTime", "cfaEmployeeId") VALUES
+INSERT INTO "event" ("title", "description", "date", "startTime", "endTime", "cfaemployeeId") VALUES
 ('Journée Portes Ouvertes', 'Venez découvrir nos locaux et nos formations.', '2024-07-15', '10:00:00', '17:00:00', 2),
 ('Séance Orientation', 'Informations sur nos programmes de formation.', '2024-08-01', '14:00:00', '16:00:00', 1),
 ('Forum des Métiers', 'Rencontrez nos anciens élèves et découvrez leurs métiers.', '2024-09-01', '09:00:00', '12:00:00', 3),
@@ -165,8 +165,8 @@ INSERT INTO "certificate" ("title", "description", "date", "status", "type", "le
 
 -- Insertion des relations N:N
 
--- Employé CFA - Contact
-INSERT INTO "cfaEmployee_contact" ("cfaEmployeeId", "contactId") VALUES
+-- cfaemployee_contact
+INSERT INTO "cfaemployee_contact" ("cfaemployeeId", "contactId") VALUES
 (1, 2),
 (2, 1),
 (3, 3),
@@ -175,8 +175,8 @@ INSERT INTO "cfaEmployee_contact" ("cfaEmployeeId", "contactId") VALUES
 (6, 6),
 (7, 7);
 
--- Employé CFA - Candidat
-INSERT INTO "cfaEmployee_candidate" ("cfaEmployeeId", "candidateId") VALUES
+-- cfaemployee_candidate
+INSERT INTO "cfaemployee_candidate" ("cfaemployeeId", "candidateId") VALUES
 (1, 1),
 (2, 2),
 (3, 3),
@@ -205,8 +205,8 @@ INSERT INTO "candidate_training" ("candidateId", "trainingId") VALUES
 (6, 6),
 (7, 7);
 
--- Employé CFA - Actualité
-INSERT INTO "cfaEmployee_news" ("cfaEmployeeId", "newsId") VALUES
+-- cfaemployee_news
+INSERT INTO "cfaemployee_news" ("cfaemployeeId", "newsId") VALUES
 (1, 1),
 (2, 2),
 (3, 3),
@@ -216,3 +216,4 @@ INSERT INTO "cfaEmployee_news" ("cfaEmployeeId", "newsId") VALUES
 (7, 7);
 
 COMMIT;
+

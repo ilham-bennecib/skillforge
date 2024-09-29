@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'fieldApp',
     'courseApp',
     'contactApp',
+    'cfaEmployeeApp',
+
    
 ]
 
