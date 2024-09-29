@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS "cfaemployee" (
     "position" VARCHAR(250),
     "matricule" INTEGER NOT NULL,
     "password" TEXT NOT NULL,
-    "cfa" INT NOT NULL REFERENCES "structure"("id") ON DELETE CASCADE,
+    "structureId" INT NOT NULL REFERENCES "structure"("id") ON DELETE CASCADE,
     "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ

@@ -25,7 +25,7 @@ def get_all_cfaEmployees(request):
                 'position': one_employee[1],
                 'matricule': one_employee[2],
                 'password': one_employee[3],
-                'cfa': one_employee[4],
+                'structureId': one_employee[4],
                 'userId': one_employee[5],
                 'createdAt': one_employee[6],
                 'updatedAt': one_employee[7],
@@ -44,7 +44,7 @@ def get_one_cfaEmployee(request, employee_id):
             'position': one_employee[1],
             'matricule': one_employee[2],
             'password': one_employee[3],
-            'cfa': one_employee[4],
+            'structureId': one_employee[4],
             'userId': one_employee[5],
             'createdAt': one_employee[6],
             'updatedAt': one_employee[7],
@@ -81,7 +81,7 @@ def create_cfaEmployee(request, user_id):
             position = form.cleaned_data['position']
             matricule = form.cleaned_data['matricule']
             password = form.cleaned_data['password']
-            cfa = form.cleaned_data['cfa']
+            structureId = form.cleaned_data['structureId']
 
             try:
                 # Create the CFA employee using the dataMapper
@@ -89,7 +89,7 @@ def create_cfaEmployee(request, user_id):
                     position=position,
                     matricule=matricule,
                     password=password,
-                    cfa=cfa,
+                    structureId=structureId,
                     user_id=user_id
                 )
 
@@ -163,7 +163,7 @@ def update_cfaEmployee(request, employee_id):
                 position = form_employee.cleaned_data['position']
                 matricule = form_employee.cleaned_data['matricule']
                 password = form_employee.cleaned_data['password']
-                cfa = form_employee.cleaned_data['cfa']
+                structureId = form_employee.cleaned_data['structureId']
 
                 # Extract user data
                 last_name = form_user.cleaned_data['last_name']
@@ -175,7 +175,7 @@ def update_cfaEmployee(request, employee_id):
 
                 # Step 2: Update the CFA employee details
                 result_employee = dataMapper_cfaEmployee.CfaEmployeeMapper().update_employee(
-                    employee_id, position, matricule, password, cfa, user_id
+                    employee_id, position, matricule, password, structureId, user_id
                 )
                 if not result_employee.get("success"):
                     return JsonResponse(result_employee, status=400)

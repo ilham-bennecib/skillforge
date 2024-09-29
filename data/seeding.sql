@@ -64,7 +64,7 @@ INSERT INTO "training" ("name", "price", "startDate", "endDate", "type", "direct
 ('Formation Mathématiques', 3200.00, '2025-02-01', '2025-07-31', 'Formation continue', 'dirTraining7', 7, 7);
 
 -- Insertion des employés CFA
-INSERT INTO "cfaemployee" ("position", "matricule", "password", "cfa", "userId") VALUES
+INSERT INTO "cfaemployee" ("position", "matricule", "password", "structureId", "userId") VALUES
 ('Formateur', 123456, 'cfaemppass', 1, 1),
 ('Responsable Administratif', 987654, 'adminpass', 2, 2),
 ('Directeur', 654321, 'dirpass', 3, 3),

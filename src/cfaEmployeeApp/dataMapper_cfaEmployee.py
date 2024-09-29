@@ -14,7 +14,7 @@ class CfaEmployeeMapper:
     def get_all_employees(self):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM cfaEmployee")
+                cursor.execute("SELECT * FROM cfaemployee")
                 all_employees = cursor.fetchall()
         except psycopg2.Error as e:
             print(f"Error fetching CFA employees: {e}")
@@ -27,7 +27,7 @@ class CfaEmployeeMapper:
     def get_employee_by_id(self, employee_id):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM cfaEmployee WHERE id = %s", [employee_id])
+                cursor.execute("SELECT * FROM cfaemployee WHERE id = %s", [employee_id])
                 employee = cursor.fetchone()
         except psycopg2.Error as e:
             print(f"Error fetching CFA employee: {e}")
@@ -36,28 +36,28 @@ class CfaEmployeeMapper:
 
         return employee
 
-    def create_employee(self, position, matricule, password, cfa, user_id):
+    def create_employee(self, position, matricule, password, structureId, user_id):
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO cfaEmployee ("position", "matricule", "password", "cfa", "userId")
+                INSERT INTO cfaemployee ("position", "matricule", "password", "structureId", "userId")
                 VALUES (%s, %s, %s, %s, %s)
                 RETURNING id
-                """, (position, matricule, password, cfa, user_id)
+                """, (position, matricule, password, structureId, user_id)
             )
             employee_id = cursor.fetchone()[0]
         self.connection.commit()
         return employee_id
 
-    def update_employee(self, employee_id, position, matricule, password, cfa, user_id):
+    def update_employee(self, employee_id, position, matricule, password, structureId, user_id):
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    UPDATE cfaEmployee
-                    SET "position" = %s, "matricule" = %s, "password" = %s, "cfa" = %s, "userId" = %s, "updatedAt" = NOW()
+                    UPDATE cfaemployee
+                    SET "position" = %s, "matricule" = %s, "password" = %s, "structureId" = %s, "userId" = %s, "updatedAt" = NOW()
                     WHERE id = %s
-                    """, (position, matricule, password, cfa, user_id, employee_id)
+                    """, (position, matricule, password, structureId, user_id, employee_id)
                 )
                 if cursor.rowcount == 0:
                     return {"success": False, "message": "CFA Employee not found"}
@@ -70,7 +70,7 @@ class CfaEmployeeMapper:
     def delete_employee(self, employee_id):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("DELETE FROM cfaEmployee WHERE id = %s", [employee_id])
+                cursor.execute("DELETE FROM cfaemployee WHERE id = %s", [employee_id])
                 if cursor.rowcount == 0:
                     return {"success": False, "message": "CFA Employee not found"}
             self.connection.commit()
