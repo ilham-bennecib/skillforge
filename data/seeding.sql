@@ -10,7 +10,7 @@ INSERT INTO "role" ("name", "permissions") VALUES
 ('employé cfa', '{"create": true, "read": true, "update": true, "delete": true}'),
 ('interlocuteur', '{"create": true, "read": true, "update": true, "delete": true}'),
 ('étudiant', '{"create": true, "read": true, "update": true, "delete": true}'),
-("trainer",'{"read": true}'),
+('trainer','{"read": true}'),
 ('candidat', '{"read": true}');
 
 -- Insertion des utilisateurs
@@ -94,14 +94,14 @@ INSERT INTO "course" ("name", "trainer") VALUES
 ('Cours de Mathématiques Avancées', 7);
 
 -- Insertion des contacts
-INSERT INTO "contact" ("position", "companyId", "userId", "password", "roleId") VALUES
-('Responsable RH', 1, 2, 'password123', 2),
-('Directeur', 2, 1, 'adminpass', 1),
-('Chef de Projet', 3, 3, 'projpass', 2),
-('Responsable des Achats', 4, 4, 'achatspass', 2),
-('Ingénieur Qualité', 5, 5, 'qualpass', 2),
-('Technicien', 6, 6, 'techpass', 3),
-('Directeur Financier', 7, 7, 'finpass', 1);
+INSERT INTO "contact" ("position", "companyId", "userId", "password" ) VALUES
+('Responsable RH', 1, 2, 'password123' ),
+('Directeur', 2, 1, 'adminpass' ),
+('Chef de Projet', 3, 3, 'projpass'),
+('Responsable des Achats', 4, 4, 'achatspass'),
+('Ingénieur Qualité', 5, 5, 'qualpass'),
+('Technicien', 6, 6, 'techpass'),
+('Directeur Financier', 7, 7, 'finpass');
 
 -- Insertion des candidats
 INSERT INTO "candidate" ("lastDiploma", "dateOfBirth", "address", "userId") VALUES

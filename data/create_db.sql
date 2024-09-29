@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS "contact" (
     "companyId" INT NOT NULL REFERENCES "company"("id") ON DELETE CASCADE,
     "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "password" TEXT NOT NULL,
-    "roleId" INT NOT NULL REFERENCES "role"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
