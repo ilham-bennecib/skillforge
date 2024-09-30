@@ -1,6 +1,6 @@
 BEGIN;
 
-TRUNCATE "role", "customer", "cfaemployee_contact", "course_training", 
+TRUNCATE "role", "customer", "cfaemployee_contact", "course_training", "candidate_training",
 "student", "certificate", "event", "task", "news", "cfaemployee", "candidate", "contact", "course", "session", "training", "structure", "field", 
 "company" RESTART IDENTITY;
 
@@ -178,6 +178,16 @@ INSERT INTO "cfaemployee_contact" ("cfaemployeeId", "contactId", "exchange") VAL
 
 -- Cours - Formation
 INSERT INTO "course_training" ("courseId", "trainingId") VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7);
+
+-- Candidat - Formation
+INSERT INTO "candidate_training" ("candidateId", "trainingId") VALUES
 (1, 1),
 (2, 2),
 (3, 3),
