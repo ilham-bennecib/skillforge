@@ -195,6 +195,7 @@ CREATE TABLE IF NOT EXISTS "cfaemployee_contact" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
     "contactId" INT NOT NULL REFERENCES "contact"("id") ON DELETE CASCADE,
+    "exchange" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );

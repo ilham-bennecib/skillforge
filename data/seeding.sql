@@ -166,14 +166,14 @@ INSERT INTO "certificate" ("title", "description", "date", "status", "type", "le
 -- Insertion des relations N:N
 
 -- cfaemployee_contact
-INSERT INTO "cfaemployee_contact" ("cfaemployeeId", "contactId") VALUES
-(1, 2),
-(2, 1),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7);
+INSERT INTO "cfaemployee_contact" ("cfaemployeeId", "contactId", "exchange") VALUES
+(1, 2, 'contacté auj'),
+(2, 1, 'contacté auj'),
+(3, 3, 'contacté auj'),
+(4, 4, 'contacté auj'),
+(5, 5, 'contacté auj'),
+(6, 6, 'contacté auj'),
+(7, 7, 'contacté auj');
 
 -- cfaemployee_candidate
 INSERT INTO "cfaemployee_candidate" ("cfaemployeeId", "candidateId") VALUES
