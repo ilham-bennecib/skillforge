@@ -49,6 +49,10 @@ INSTALLED_APPS = [
     'courseApp',
     'contactApp',
     'cfaEmployeeApp',
+    'sessionApp',
+    'newsApp',
+    'taskApp',
+    'eventApp',
 
    
 ]
