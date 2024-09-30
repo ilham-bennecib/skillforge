@@ -200,15 +200,6 @@ CREATE TABLE IF NOT EXISTS "cfaemployee_contact" (
     "updatedAt" TIMESTAMPTZ
 );
 
--- cfaemployee_candidate
-CREATE TABLE IF NOT EXISTS "cfaemployee_candidate" (
-    "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
-    "candidateId" INT NOT NULL REFERENCES "candidate"("id") ON DELETE CASCADE,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ
-);
-
 -- course_training
 CREATE TABLE IF NOT EXISTS "course_training" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -218,22 +209,5 @@ CREATE TABLE IF NOT EXISTS "course_training" (
     "updatedAt" TIMESTAMPTZ
 );
 
--- candidate_training
-CREATE TABLE IF NOT EXISTS "candidate_training" (
-    "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "candidateId" INT NOT NULL REFERENCES "candidate"("id") ON DELETE CASCADE,
-    "trainingId" INT NOT NULL REFERENCES "training"("id") ON DELETE CASCADE,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ
-);
-
--- cfaemployee_news
-CREATE TABLE IF NOT EXISTS "cfaemployee_news" (
-    "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "cfaemployeeId" INT NOT NULL REFERENCES "cfaemployee"("id") ON DELETE CASCADE,
-    "newsId" INT NOT NULL REFERENCES "news"("id") ON DELETE CASCADE,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ
-);
 
 COMMIT;
