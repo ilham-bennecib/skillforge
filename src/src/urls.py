@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/contacts/', include('contactApp.urls')),
     path('api/cfaEmployees/', include('cfaEmployeeApp.urls')),
     path('api/sessions/', include('sessionApp.urls')),
-    # path('api/certificates/', include('certificateApp.urls')),
+    path('api/certificates/', include('certificateApp.urls')),
     path('api/tasks/', include('taskApp.urls')),
     path('api/news/', include('newsApp.urls')),
     path('api/events/', include('eventApp.urls')),
