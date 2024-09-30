@@ -35,4 +35,5 @@ urlpatterns = [
     path('api/tasks/', include('taskApp.urls')),
     path('api/news/', include('newsApp.urls')),
     path('api/events/', include('eventApp.urls')),
+    path('api/cfaemployees_contacts/', include('cfaemployee_contactApp.urls')),
 ]
