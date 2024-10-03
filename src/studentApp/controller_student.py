@@ -20,12 +20,8 @@ def get_all_students(request):
         student_list = [
             {
                 'id': one_student[0],
-                'password': one_student[1],
-                'companyId': one_student[2],
-                'sessionId': one_student[3],
-                'candidateId': one_student[4],
-                'createdAt': one_student[5],
-                'updatedAt': one_student[6]
+                    'firstName': one_student[1],
+                    'lastName': one_student[2]
             } for one_student in all_students
         ]
         return JsonResponse(student_list, safe=False)

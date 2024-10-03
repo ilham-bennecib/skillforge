@@ -14,7 +14,18 @@ class StudentMapper:
     def get_all_students(self):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM student")
+                cursor.execute("""
+                               SELECT 
+                    student."id",
+                    customer."firstName",
+                    customer."lastName"
+                FROM 
+                    student
+                JOIN 
+                    candidate ON student."candidateId" = candidate."id"
+                JOIN 
+                    customer ON candidate."userId" = customer."id"
+                               """)
                 all_students = cursor.fetchall()
         except psycopg2.Error as e:
             print(f"Error fetching students: {e}")
