@@ -16,15 +16,22 @@ class CandidateMapper:
     def get_all_candidates(self):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM candidate")
+                # Requête pour obtenir uniquement les noms et prénoms des candidats et leurs utilisateurs associés
+                cursor.execute("""
+                    SELECT 
+                        candidate."id",
+                        customer."firstName",
+                        customer."lastName"
+                    FROM 
+                        candidate
+                    JOIN 
+                        customer ON candidate."userId" = customer."id"
+                """)
                 all_candidates = cursor.fetchall()
+            return all_candidates
         except psycopg2.Error as e:
-            print(f"Erreur lors de la récupération des candidats: {e}")
-            all_candidates = []
-        finally:
-            self.connection.close()
-
-        return all_candidates
+            print(f"Erreur lors de la récupération des candidats : {e}")
+            return []
     
     def get_candidate_by_id(self,candidate_id):
         try:

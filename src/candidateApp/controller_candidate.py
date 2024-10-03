@@ -18,26 +18,19 @@ def json_response_success(data, status=200):
     return JsonResponse(data, status=status)
 
 def get_all_candidates(request):
-   
-    all_candidate = dataMapper_candidate.CandidateMapper().get_all_candidates()
-    print(all_candidate)
-    # Créer une liste de dictionnaires avec les données des utilisateurs
-    if len(all_candidate) != 0:
-
+    all_candidates = dataMapper_candidate.CandidateMapper().get_all_candidates()
+    if len(all_candidates) != 0:
+        # Créer une liste de dictionnaires avec les données des candidats
         candidate_list = [
             {
-                'id': one_candidate[0],
-                'lastDiploma': one_candidate[1],
-                'dateOfBirth': one_candidate[2],
-                'address': one_candidate[3],
-                'userId': one_candidate[4],
-                'createdAt': one_candidate[5],
-                'updatedAt': one_candidate[6]
-            } for one_candidate in all_candidate
+                'id': one_candidate[0],  # ID du candidat
+                'firstName': one_candidate[1],  # Prénom
+                'lastName': one_candidate[2]  # Nom
+            } for one_candidate in all_candidates
         ]
         return JsonResponse(candidate_list, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
     else:
-        return JsonResponse({'error': 'Users not found'}, status=404)
+        return JsonResponse({'error': 'Candidats non trouvés'}, status=404)
     
 def get_one_candidate(request, candidate_id):
 
