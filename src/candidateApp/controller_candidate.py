@@ -33,24 +33,29 @@ def get_all_candidates(request):
         return JsonResponse({'error': 'Candidats non trouvés'}, status=404)
     
 def get_one_candidate(request, candidate_id):
-
     one_candidate = dataMapper_candidate.CandidateMapper().get_candidate_by_id(candidate_id)
-    print (candidate_id)
-    if candidate_id is not None:
-        candidate_data={
-                'id': one_candidate[0],
-                'lastDiploma': one_candidate[1],
-                'dateOfBirth': one_candidate[2],
-                'address': one_candidate[3],
-                'userId': one_candidate[4],
-                'createdAt': one_candidate[5],
-                'updatedAt': one_candidate[6],
-                
-            }
-
-        return JsonResponse(candidate_data, safe=False)  # safe=False permet d'envoyer une liste au lieu d'un dictionnaire
+    
+    if one_candidate is not None:
+        candidate_data = {
+            'id': one_candidate[0],
+            'lastDiploma': one_candidate[1],
+            'dateOfBirth': one_candidate[2],
+            'address': one_candidate[3],
+            'userId': one_candidate[4],
+            'createdAt': one_candidate[5],
+            'updatedAt': one_candidate[6],
+            'firstName': one_candidate[7],
+            'lastName': one_candidate[8],
+            'email': one_candidate[9],
+            'phone': one_candidate[10],
+            'directory': one_candidate[11],
+            'roleId': one_candidate[12],
+            'customerCreatedAt': one_candidate[13],
+            'customerUpdatedAt': one_candidate[14]
+        }
+        return JsonResponse(candidate_data, safe=False)
     else:
-        return JsonResponse({'error': 'candiate not found'}, status=404)
+        return JsonResponse({'error': 'Candidate not found'}, status=404)
 
 @csrf_exempt
 def create_candidate(request,user_id):

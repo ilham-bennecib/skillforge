@@ -29,18 +29,30 @@ def get_all_students(request):
         return JsonResponse({'error': 'Students not found'}, status=404)
 
 def get_one_student(request, student_id):
-    one_student = dataMapper_student.StudentMapper().get_student_by_id(student_id)
-    if one_student is not None:
-        student_data = {
-            'id': one_student[0],
-            'password': one_student[1],
-            'companyId': one_student[2],
-            'sessionId': one_student[3],
-            'candidateId': one_student[4],
-            'createdAt': one_student[5],
-            'updatedAt': one_student[6]
+    student_data = dataMapper_student.StudentMapper().get_student_by_id(student_id)
+    
+    if student_data:
+        student_info = {
+            'student_id': student_data[0],
+            'password': student_data[1],
+            'student_created_at': student_data[2],
+            'student_updated_at': student_data[3],
+            'lastDiploma': student_data[4],
+            'dateOfBirth': student_data[5],
+            'address': student_data[6],
+            'lastName': student_data[7],
+            'firstName': student_data[8],
+            'email': student_data[9],
+            'phone': student_data[10],
+            'directory': student_data[11],
+            'roleId': student_data[12],
+            'company_id': student_data[13],
+            'structure_name': student_data[14],
+            'session_name': student_data[15],
+            'training_name': student_data[16],
         }
-        return JsonResponse(student_data, safe=False)
+        
+        return JsonResponse(student_info, safe=False)
     else:
         return JsonResponse({'error': 'Student not found'}, status=404)
 

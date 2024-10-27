@@ -38,13 +38,52 @@ class StudentMapper:
     def get_student_by_id(self, student_id):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM student WHERE id = %s", [student_id])
+                cursor.execute("""
+                    SELECT 
+                        student."id" AS student_id,
+                        student."password",
+                        student."createdAt" AS student_created_at,
+                        student."updatedAt" AS student_updated_at,
+                        candidate."lastDiploma",
+                        candidate."dateOfBirth",
+                        candidate."address",
+                        customer."lastName",
+                        customer."firstName",
+                        customer."email",
+                        customer."phone",
+                        customer."directory",
+                        customer."roleId",
+                        company."id",
+                        structure."name",
+                        session."name",
+                        training."name"
+                    FROM 
+                        student
+                    JOIN 
+                        candidate ON student."candidateId" = candidate."id"
+                    JOIN 
+                        customer ON candidate."userId" = customer."id"
+                    JOIN 
+                        company ON company."id"=student."companyId"
+                    JOIN 
+                        structure ON structure."id" = company."structureId"
+                    JOIN 
+                        session ON session."id"=student."sessionId"
+                    JOIN 
+                        training ON training."id" = session."trainingId"
+                    WHERE 
+                        student.id = %s
+                """, [student_id])
+                
                 student = cursor.fetchone()
         except psycopg2.Error as e:
             print(f"Error fetching student: {e}")
+            student = None
         finally:
             self.connection.close()
+        
         return student
+
 
     def create_student(self, password, company_id, session_id, candidate_id):
         with self.connection.cursor() as cursor:

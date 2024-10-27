@@ -36,7 +36,30 @@ class CandidateMapper:
     def get_candidate_by_id(self,candidate_id):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM candidate WHERE id = %s", [candidate_id])
+                cursor.execute('''SELECT 
+                        candidate."id",
+                        candidate."lastDiploma",
+                        candidate."dateOfBirth",
+                        candidate."address",
+                        candidate."userId",
+                        candidate."createdAt",
+                        candidate."updatedAt",
+                        customer."firstName",
+                        customer."lastName",
+                        customer."email",
+                        customer."phone",
+                        customer."directory",
+                        customer."roleId",
+                        customer."createdAt" AS customerCreatedAt,
+                        customer."updatedAt" AS customerUpdatedAt
+                    FROM 
+                        candidate
+                    JOIN 
+                        customer ON candidate."userId" = customer."id"
+                    WHERE 
+                        candidate."id" = %s
+                    ''', [candidate_id]
+                )
                 candidate = cursor.fetchone()
                 print (candidate)
         except psycopg2.Error as e:
