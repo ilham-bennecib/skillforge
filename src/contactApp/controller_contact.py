@@ -25,10 +25,9 @@ def get_all_contacts(request):
                 'position': one_contact[1],
                 'companyId': one_contact[2],
                 'userId': one_contact[3],
-                'password': one_contact[4],
-                'roleId': one_contact[5],
-                'createdAt': one_contact[6],
-                'updatedAt': one_contact[7],
+                'roleId': one_contact[4],
+                'createdAt': one_contact[5],
+                'updatedAt': one_contact[6],
             } for one_contact in all_contacts
         ]
         return JsonResponse(contact_list, safe=False)
@@ -44,10 +43,9 @@ def get_one_contact(request, contact_id):
             'position': one_contact[1],
             'companyId': one_contact[2],
             'userId': one_contact[3],
-            'password': one_contact[4],
-            'roleId': one_contact[5],
-            'createdAt': one_contact[6],
-            'updatedAt': one_contact[7],
+            'roleId': one_contact[4],
+            'createdAt': one_contact[5],
+            'updatedAt': one_contact[6],
         }
         return JsonResponse(contact_data, safe=False)
     else:
@@ -81,7 +79,7 @@ def create_contact(request, user_id):
         if form.is_valid():
             position = form.cleaned_data['position']
             company_id = form.cleaned_data['companyId']
-            password = form.cleaned_data['password']
+            
             
 
             try:
@@ -90,7 +88,7 @@ def create_contact(request, user_id):
                     position=position,
                     company_id=company_id,
                     user_id=user_id,
-                    password=password,
+                  
                     
                 )
 
@@ -163,7 +161,7 @@ def update_contact(request, contact_id):
                 # Extract contact data
                 position = form_contact.cleaned_data['position']
                 company_id = form_contact.cleaned_data['companyId']
-                password = form_contact.cleaned_data['password']
+            
 
                 # Extract user data
                 last_name = form_user.cleaned_data['last_name']
@@ -175,7 +173,7 @@ def update_contact(request, contact_id):
 
                 # Step 2: Update the contact details
                 result_contact = dataMapper_contact.ContactMapper().update_contact(
-                    contact_id, position, company_id, user_id, password
+                    contact_id, position, company_id, user_id, 
                 )
                 if not result_contact.get("success"):
                     return JsonResponse(result_contact, status=400)

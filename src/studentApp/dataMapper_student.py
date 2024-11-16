@@ -41,7 +41,6 @@ class StudentMapper:
                 cursor.execute("""
                     SELECT 
                         student."id" AS student_id,
-                        student."password",
                         student."createdAt" AS student_created_at,
                         student."updatedAt" AS student_updated_at,
                         candidate."lastDiploma",
@@ -85,14 +84,14 @@ class StudentMapper:
         return student
 
 
-    def create_student(self, password, company_id, session_id, candidate_id):
+    def create_student(self, company_id, session_id, candidate_id):
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO student ("password", "companyId", "sessionId", "candidateId")
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO student ( "companyId", "sessionId", "candidateId")
+                VALUES ( %s, %s, %s)
                 RETURNING id
-                """, (password, company_id, session_id, candidate_id)
+                """, ( company_id, session_id, candidate_id)
             )
             student_id = cursor.fetchone()[0]
         self.connection.commit()
@@ -109,15 +108,15 @@ class StudentMapper:
         except psycopg2.Error as e:
             return {"success": False, "message": f"Database error: {str(e)}"}
 
-    def update_student(self, student_id, password, company_id, session_id, candidate_id):
+    def update_student(self, student_id, company_id, session_id, candidate_id):
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(
                     """
                     UPDATE student
-                    SET "password" = %s, "companyId" = %s, "sessionId" = %s, "candidateId" = %s, "updatedAt" = NOW()
+                    SET  "companyId" = %s, "sessionId" = %s, "candidateId" = %s, "updatedAt" = NOW()
                     WHERE id = %s
-                    """, (password, company_id, session_id, candidate_id, student_id)
+                    """, ( company_id, session_id, candidate_id, student_id)
                 )
                 if cursor.rowcount == 0:
                     return {"success": False, "message": "Student not found"}

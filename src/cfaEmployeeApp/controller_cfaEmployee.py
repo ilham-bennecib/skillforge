@@ -24,11 +24,10 @@ def get_all_cfaEmployees(request):
                 'id': one_employee[0],
                 'position': one_employee[1],
                 'matricule': one_employee[2],
-                'password': one_employee[3],
-                'structureId': one_employee[4],
-                'userId': one_employee[5],
-                'createdAt': one_employee[6],
-                'updatedAt': one_employee[7],
+                'structureId': one_employee[3],
+                'userId': one_employee[4],
+                'createdAt': one_employee[5],
+                'updatedAt': one_employee[6],
             } for one_employee in all_employees
         ]
         return JsonResponse(employee_list, safe=False)
@@ -43,11 +42,10 @@ def get_one_cfaEmployee(request, employee_id):
             'id': one_employee[0],
             'position': one_employee[1],
             'matricule': one_employee[2],
-            'password': one_employee[3],
-            'structureId': one_employee[4],
-            'userId': one_employee[5],
-            'createdAt': one_employee[6],
-            'updatedAt': one_employee[7],
+            'structureId': one_employee[3],
+            'userId': one_employee[4],
+            'createdAt': one_employee[5],
+            'updatedAt': one_employee[6],
         }
         return JsonResponse(employee_data, safe=False)
     else:
@@ -80,7 +78,6 @@ def create_cfaEmployee(request, user_id):
         if form.is_valid():
             position = form.cleaned_data['position']
             matricule = form.cleaned_data['matricule']
-            password = form.cleaned_data['password']
             structureId = form.cleaned_data['structureId']
 
             try:
@@ -88,7 +85,6 @@ def create_cfaEmployee(request, user_id):
                 employee_id = dataMapper_cfaEmployee.CfaEmployeeMapper().create_employee(
                     position=position,
                     matricule=matricule,
-                    password=password,
                     structureId=structureId,
                     user_id=user_id
                 )
@@ -162,7 +158,6 @@ def update_cfaEmployee(request, employee_id):
                 # Extract CFA employee data
                 position = form_employee.cleaned_data['position']
                 matricule = form_employee.cleaned_data['matricule']
-                password = form_employee.cleaned_data['password']
                 structureId = form_employee.cleaned_data['structureId']
 
                 # Extract user data
@@ -175,7 +170,7 @@ def update_cfaEmployee(request, employee_id):
 
                 # Step 2: Update the CFA employee details
                 result_employee = dataMapper_cfaEmployee.CfaEmployeeMapper().update_employee(
-                    employee_id, position, matricule, password, structureId, user_id
+                    employee_id, position, matricule, structureId, user_id
                 )
                 if not result_employee.get("success"):
                     return JsonResponse(result_employee, status=400)

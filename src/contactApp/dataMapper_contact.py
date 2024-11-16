@@ -36,28 +36,28 @@ class ContactMapper:
 
         return contact
 
-    def create_contact(self, position, company_id, user_id, password):
+    def create_contact(self, position, company_id, user_id):
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO contact ("position", "companyId", "userId", "password")
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO contact ("position", "companyId", "userId",)
+                VALUES (%s, %s, %s)
                 RETURNING id
-                """, (position, company_id, user_id, password)
+                """, (position, company_id, user_id,)
             )
             contact_id = cursor.fetchone()[0]
         self.connection.commit()
         return contact_id
 
-    def update_contact(self, contact_id, position, company_id, user_id, password):
+    def update_contact(self, contact_id, position, company_id, user_id):
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(
                     """
                     UPDATE contact
-                    SET "position" = %s, "companyId" = %s, "userId" = %s, "password" = %s, "updatedAt" = NOW()
+                    SET "position" = %s, "companyId" = %s, "userId" = %s, "updatedAt" = NOW()
                     WHERE id = %s
-                    """, (position, company_id, user_id, password, contact_id)
+                    """, (position, company_id, user_id, contact_id)
                 )
                 if cursor.rowcount == 0:
                     return {"success": False, "message": "Contact not found"}

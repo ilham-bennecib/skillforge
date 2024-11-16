@@ -36,28 +36,28 @@ class CfaEmployeeMapper:
 
         return employee
 
-    def create_employee(self, position, matricule, password, structureId, user_id):
+    def create_employee(self, position, matricule, structureId, user_id):
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO cfaemployee ("position", "matricule", "password", "structureId", "userId")
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO cfaemployee ("position", "matricule", "structureId", "userId")
+                VALUES (%s, %s, %s, %s)
                 RETURNING id
-                """, (position, matricule, password, structureId, user_id)
+                """, (position, matricule, structureId, user_id)
             )
             employee_id = cursor.fetchone()[0]
         self.connection.commit()
         return employee_id
 
-    def update_employee(self, employee_id, position, matricule, password, structureId, user_id):
+    def update_employee(self, employee_id, position, matricule, structureId, user_id):
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(
                     """
                     UPDATE cfaemployee
-                    SET "position" = %s, "matricule" = %s, "password" = %s, "structureId" = %s, "userId" = %s, "updatedAt" = NOW()
+                    SET "position" = %s, "matricule" = %s, "structureId" = %s, "userId" = %s, "updatedAt" = NOW()
                     WHERE id = %s
-                    """, (position, matricule, password, structureId, user_id, employee_id)
+                    """, (position, matricule, structureId, user_id, employee_id)
                 )
                 if cursor.rowcount == 0:
                     return {"success": False, "message": "CFA Employee not found"}

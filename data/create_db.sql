@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS "customer" (
     "lastName" VARCHAR(250) NOT NULL,
     "firstName" VARCHAR(250) NOT NULL,
     "email" VARCHAR(250) NOT NULL UNIQUE,
+    "password" TEXT,
     "phone" BIGINT NOT NULL UNIQUE,
     "directory" VARCHAR(250) NOT NULL UNIQUE,
     "roleId" INT NOT NULL REFERENCES "role"("id") ON DELETE CASCADE,
@@ -90,7 +91,6 @@ CREATE TABLE IF NOT EXISTS "contact" (
     "position" VARCHAR(250),
     "companyId" INT NOT NULL REFERENCES "company"("id") ON DELETE CASCADE,
     "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
-    "password" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ
 );
@@ -111,7 +111,6 @@ CREATE TABLE IF NOT EXISTS "cfaemployee" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "position" VARCHAR(250),
     "matricule" INTEGER NOT NULL,
-    "password" TEXT NOT NULL,
     "structureId" INT NOT NULL REFERENCES "structure"("id") ON DELETE CASCADE,
     "userId" INT NOT NULL REFERENCES "customer"("id") ON DELETE CASCADE,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -166,7 +165,6 @@ CREATE TABLE IF NOT EXISTS "event" (
 -- Création de la table student
 CREATE TABLE IF NOT EXISTS "student" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "password" VARCHAR(100) NOT NULL,
     "companyId" INT NOT NULL REFERENCES "company"("id") ON DELETE CASCADE,
     "sessionId" INT NOT NULL REFERENCES "session"("id") ON DELETE CASCADE,
     "candidateId" INT NOT NULL REFERENCES "candidate"("id") ON DELETE CASCADE,

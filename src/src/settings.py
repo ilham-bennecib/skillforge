@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'taskApp',
     'eventApp',
     'cfaemployee_contactApp',
+    'accountApp',
 
    
 ]
@@ -149,6 +150,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Adresse du front-end React
 ]
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 
 

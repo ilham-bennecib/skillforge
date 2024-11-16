@@ -34,22 +34,21 @@ def get_one_student(request, student_id):
     if student_data:
         student_info = {
             'student_id': student_data[0],
-            'password': student_data[1],
-            'student_created_at': student_data[2],
-            'student_updated_at': student_data[3],
-            'lastDiploma': student_data[4],
-            'dateOfBirth': student_data[5],
-            'address': student_data[6],
-            'lastName': student_data[7],
-            'firstName': student_data[8],
-            'email': student_data[9],
-            'phone': student_data[10],
-            'directory': student_data[11],
-            'roleId': student_data[12],
-            'company_id': student_data[13],
-            'structure_name': student_data[14],
-            'session_name': student_data[15],
-            'training_name': student_data[16],
+            'student_created_at': student_data[1],
+            'student_updated_at': student_data[2],
+            'lastDiploma': student_data[3],
+            'dateOfBirth': student_data[4],
+            'address': student_data[5],
+            'lastName': student_data[6],
+            'firstName': student_data[7],
+            'email': student_data[8],
+            'phone': student_data[9],
+            'directory': student_data[10],
+            'roleId': student_data[11],
+            'company_id': student_data[12],
+            'structure_name': student_data[13],
+            'session_name': student_data[14],
+            'training_name': student_data[15],
         }
         
         return JsonResponse(student_info, safe=False)
@@ -73,14 +72,13 @@ def create_student(request, candidate_id):
 
             # Step 4: Validate the form
             if form.is_valid():
-                password = form.cleaned_data['password']
                 company_id = form.cleaned_data['companyId']
                 session_id = form.cleaned_data['sessionId']
 
                 # Step 5: Create the student using the dataMapper
                 try:
                     student_id = dataMapper_student.StudentMapper().create_student(
-                        password=password,
+
                         company_id=company_id,
                         session_id=session_id,
                         candidate_id=candidate_id  
@@ -156,7 +154,7 @@ def update_student(request, student_id):
             # Step 4: Validate the forms
             if form_student.is_valid() and formCandidate.is_valid() and form_user.is_valid():
                 # Extract student data
-                password = form_student.cleaned_data['password']
+        
                 company_id = form_student.cleaned_data['companyId']
                 session_id = form_student.cleaned_data['sessionId']
 
@@ -175,7 +173,7 @@ def update_student(request, student_id):
 
                 # Step 5: Update the student details
                 result_student = dataMapper_student.StudentMapper().update_student(
-                    student_id, password, company_id, session_id, candidate_id
+                    student_id, company_id, session_id, candidate_id
                 )
                 if not result_student.get("success"):
                     return JsonResponse(result_student, status=400)
