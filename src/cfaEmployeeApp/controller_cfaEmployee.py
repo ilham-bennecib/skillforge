@@ -36,7 +36,9 @@ def get_all_cfaEmployees(request):
 
 
 def get_one_cfaEmployee(request, employee_id):
+
     one_employee = dataMapper_cfaEmployee.CfaEmployeeMapper().get_employee_by_id(employee_id)
+    
     if one_employee is not None:
         employee_data = {
             'id': one_employee[0],
@@ -46,11 +48,45 @@ def get_one_cfaEmployee(request, employee_id):
             'userId': one_employee[4],
             'createdAt': one_employee[5],
             'updatedAt': one_employee[6],
+            'firstName': one_employee[7],
+            'lastName': one_employee[8],
+            'email': one_employee[9],
+            'password': one_employee[10],
+            'phone': one_employee[11],
+            'directory': one_employee[12],
+            'roleId': one_employee[13],
+            'customerCreatedAt': one_employee[14],
+            'customerUpdatedAt': one_employee[15]
         }
         return JsonResponse(employee_data, safe=False)
     else:
         return JsonResponse({'error': 'CFA Employee not found'}, status=404)
-
+    
+def get_one_cfaEmployee_from_user_id(request, user_id):
+    one_employee = dataMapper_cfaEmployee.CfaEmployeeMapper().get_employee_by_user_id(user_id)
+    
+    if one_employee is not None:
+        employee_data = {
+            'id': one_employee[0],
+            'position': one_employee[1],
+            'matricule': one_employee[2],
+            'structureId': one_employee[3],
+            'userId': one_employee[4],
+            'createdAt': one_employee[5],
+            'updatedAt': one_employee[6],
+            'firstName': one_employee[7],
+            'lastName': one_employee[8],
+            'email': one_employee[9],
+            'password': one_employee[10],
+            'phone': one_employee[11],
+            'directory': one_employee[12],
+            'roleId': one_employee[13],
+            'customerCreatedAt': one_employee[14],
+            'customerUpdatedAt': one_employee[15]
+        }
+        return JsonResponse(employee_data, safe=False)
+    else:
+        return JsonResponse({'error': 'CFA Employee not found'}, status=404)
 
 @csrf_exempt
 def create_cfaEmployee(request, user_id):

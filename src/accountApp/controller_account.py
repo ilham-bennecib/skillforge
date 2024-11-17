@@ -2,13 +2,54 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime, timedelta, timezone
+from django.conf import settings
+import jwt
+from datetime import datetime, timedelta
 import bcrypt
 import json
 from .dataMapper_account import AccountMapper
 from userApp.form import UserForm
+from .token_validation import token_required
 
+#token
+def generate_tokens_for_user(user):
+    # Secret pour signer les tokens
+    secret = settings.SECRET_KEY
+    
+    
+    # Temps d'expiration
+    access_exp = datetime.now(timezone.utc) + timedelta(minutes=30)
+    refresh_exp = datetime.now(timezone.utc) + timedelta(days=7)
+
+    # Payload pour les tokens
+    access_payload = {
+        'user_id': user['id'],
+        'role_id': user['roleId'],
+        'exp': access_exp,
+        'type': 'access'
+    }
+
+    refresh_payload = {
+        'user_id': user['id'],
+        'role_id': user['roleId'],
+        'exp': refresh_exp,
+        'type': 'refresh'
+    }
+
+    # Générer les tokens
+    access_token = jwt.encode(access_payload, secret, algorithm='HS256')
+    refresh_token = jwt.encode(refresh_payload, secret, algorithm='HS256')
+
+  
+    return {
+        'access': access_token,
+        'refresh': refresh_token
+    }
 
 @csrf_exempt
+
 def login_user(request):
     if request.method == 'POST':
         try:
@@ -41,13 +82,18 @@ def login_user(request):
             if not bcrypt.checkpw(password.encode('utf-8'), db_password.encode('utf-8')):
                 return JsonResponse({'error': 'Mot de passe incorrect'}, status=403)
 
-        
+            # Générer les tokens
+            tokens = generate_tokens_for_user(user)
 
-            # Retourner une réponse de succès
+            # Retourner les tokens
             return JsonResponse({
                 'message': 'Connexion réussie',
-                'user_id': user.get('id'),  # ID de l'utilisateur
-                'role_id': user.get('roleId')   # Rôle de l'utilisateur
+                'tokens': tokens,
+                'user': {
+                    'id': user['id'],
+                    'email': user['email'],
+                    'role_id': user['roleId'],
+                },
             }, status=200)
 
         except json.JSONDecodeError:
@@ -55,13 +101,19 @@ def login_user(request):
     else:
         return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
 
+@token_required
 def logout_user(request):
     if request.method == 'POST':
-        logout(request)
-        return JsonResponse({'message': 'Déconnexion réussie'})
-    return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+        try:
+            refresh_token = request.data.get('refresh')
+            token = RefreshToken(refresh_token)
+            token.blacklist() #ajoute le token à la lmiste noir
+            return JsonResponse({'message': 'Déconnexion réussie'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': 'Impossible de se déconnecter'}, status=500)
 
 @csrf_exempt
+@token_required
 def create_user(request):
     # Initialiser le formulaire à None pour éviter l'erreur de portée
     form = None

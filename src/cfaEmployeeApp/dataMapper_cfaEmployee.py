@@ -27,14 +27,79 @@ class CfaEmployeeMapper:
     def get_employee_by_id(self, employee_id):
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM cfaemployee WHERE id = %s", [employee_id])
+                cursor.execute('''SELECT 
+                        cfaemployee."id",
+                        cfaemployee."position",
+                        cfaemployee."matricule",
+                        cfaemployee."structureId",
+                        cfaemployee."userId",
+                        cfaemployee."createdAt",
+                        cfaemployee."updatedAt",
+                        customer."firstName",
+                        customer."lastName",
+                        customer."email",
+                        customer."password",
+                        customer."phone",
+                        customer."directory",
+                        customer."roleId",
+                        customer."createdAt" AS customerCreatedAt,
+                        customer."updatedAt" AS customerUpdatedAt
+                    FROM 
+                        cfaemployee
+                    JOIN 
+                        customer ON cfaemployee."userId" = customer."id"
+                    WHERE 
+                        cfaemployee."id" = %s
+                    ''', [employee_id]
+                )
                 employee = cursor.fetchone()
+                print(employee)
         except psycopg2.Error as e:
-            print(f"Error fetching CFA employee: {e}")
+            print(f"Erreur lors de la récupération de l'employé CFA: {e}")
         finally:
             self.connection.close()
+            print("Connexion à la base de données fermée.")
 
         return employee
+    
+    def get_employee_by_user_id(self, user_id):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute('''SELECT 
+                        cfaemployee."id",
+                        cfaemployee."position",
+                        cfaemployee."matricule",
+                        cfaemployee."structureId",
+                        cfaemployee."userId",
+                        cfaemployee."createdAt",
+                        cfaemployee."updatedAt",
+                        customer."firstName",
+                        customer."lastName",
+                        customer."email",
+                        customer."password",
+                        customer."phone",
+                        customer."directory",
+                        customer."roleId",
+                        customer."createdAt" AS customerCreatedAt,
+                        customer."updatedAt" AS customerUpdatedAt
+                    FROM 
+                        cfaemployee
+                    JOIN 
+                        customer ON cfaemployee."userId" = customer."id"
+                    WHERE 
+                        cfaemployee."userId" = %s
+                    ''', [user_id]
+                )
+                employee = cursor.fetchone()
+                print(employee)
+        except psycopg2.Error as e:
+            print(f"Erreur lors de la récupération de l'employé CFA: {e}")
+        finally:
+            self.connection.close()
+            print("Connexion à la base de données fermée.")
+
+        return employee
+
 
     def create_employee(self, position, matricule, structureId, user_id):
         with self.connection.cursor() as cursor:
