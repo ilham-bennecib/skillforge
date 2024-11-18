@@ -113,7 +113,6 @@ def logout_user(request):
             return JsonResponse({'error': 'Impossible de se déconnecter'}, status=500)
 
 @csrf_exempt
-@token_required
 def create_user(request):
     # Initialiser le formulaire à None pour éviter l'erreur de portée
     form = None

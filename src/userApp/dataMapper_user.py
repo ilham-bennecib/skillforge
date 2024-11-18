@@ -42,20 +42,7 @@ class UserMapper:
         return user
         
 
-    def create_user(self, last_name, first_name, email, phone, directory, role_id):
-        with self.connection.cursor() as cursor:
-            cursor.execute(
-                """
-                INSERT INTO customer ("lastName", "firstName", "email", "phone", "directory", "roleId")
-                VALUES (%s, %s, %s, %s, %s, %s)
-                RETURNING id
-                """, (last_name, first_name, email, phone, directory, role_id)
-            )
-            user_id = cursor.fetchone()[0]
-        self.connection.commit()
-        return user_id
-
-
+   
     def delete_user(self, user_id):
         try:
             with self.connection.cursor() as cursor:

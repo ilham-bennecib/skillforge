@@ -4,6 +4,7 @@ import psycopg2
 import json
 
 from .form_candidate import CandidateForm
+from accountApp.token_validation import token_required
 
 
 from . import dataMapper_candidate
@@ -17,7 +18,16 @@ def json_response_error(message, status=400):
 def json_response_success(data, status=200):
     return JsonResponse(data, status=status)
 
+
+
+
 def get_all_candidates(request):
+
+    print("Requête reçue pour les candidats.")  # Log ici
+   
+    # Log le token reçu
+    print("Token :", request.headers.get('Authorization'))
+   
     all_candidates = dataMapper_candidate.CandidateMapper().get_all_candidates()
     if len(all_candidates) != 0:
         # Créer une liste de dictionnaires avec les données des candidats
