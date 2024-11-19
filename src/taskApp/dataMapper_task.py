@@ -35,6 +35,32 @@ class TaskMapper:
             self.connection.close()
 
         return task
+    
+    def get_tasks_by_employee_id(self, employee_id):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute('''
+                    SELECT 
+                        task."id",
+                        task."title",
+                        task."description",
+                        task."date",
+                        task."cfaemployeeId",
+                        task."createdAt",
+                        task."updatedAt"
+                    FROM 
+                        task
+                    WHERE 
+                        task."cfaemployeeId" = %s
+                ''', [employee_id])
+                tasks = cursor.fetchall()
+                return tasks
+        except psycopg2.Error as e:
+            print(f"Error fetching tasks for employee {employee_id}: {e}")
+            return []
+        finally:
+            self.connection.close()
+
 
     def create_task(self, title, description, date, cfaemployeeId):
         with self.connection.cursor() as cursor:

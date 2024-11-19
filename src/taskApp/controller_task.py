@@ -39,7 +39,30 @@ def get_one_task(request, task_id):
     else:
         return JsonResponse({'error': 'Task not found'}, status=404)
 
+def get_tasks_for_employee(request, employee_id):
+    try:
+    
+        tasks = dataMapper_task.TaskMapper().get_tasks_by_employee_id(employee_id)
 
+        if tasks:
+            task_list = [
+                {
+                    'id': task[0],
+                    'title': task[1],
+                    'description': task[2],
+                    'date': task[3],
+                    'cfaemployeeId': task[4],
+                    'createdAt': task[5],
+                    'updatedAt': task[6]
+                } for task in tasks
+            ]
+            return JsonResponse(task_list, safe=False, status=200)
+        else:
+            return JsonResponse({'error': 'No tasks found for this employee'}, status=404)
+    except Exception as e:
+        print(f"Error in get_tasks_for_employee: {e}")
+        return JsonResponse({'error': 'Internal server error'}, status=500)
+    
 @csrf_exempt
 def create_task(request):
     if request.method == 'POST':
